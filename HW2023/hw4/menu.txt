@@ -1,0 +1,11 @@
+Items	Prices(TL)
+1)Iskender	78.50
+2)Lahmacun	24.50
+3)KoftePorsiyon	65.45
+4)PirincPilavi	25.00
+5)MercimekCorbasi	25.50
+6)KellePaca	35.50
+7)Doner Porsiyon	45.00
+8)DilimBaklava	17.50
+9)Kunefe	 45.00
+10)Kaymak	14.50
