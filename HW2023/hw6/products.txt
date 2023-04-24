@@ -1,3 +1,0 @@
-pId,Type,Name,Brand,Price
-1,D,Ayran,Sutas,20.5
-2,F,Simit,Firin,8.0
