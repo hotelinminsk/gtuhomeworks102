@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
+#include <ctype.h>
 #define MAX_PRODUCT_NAME 8
 #define MAX_BRAND_NAME 5
 #define MAX_BRANCH_NAME 15
@@ -25,6 +27,27 @@ typedef struct product Product;
 
 
 void prodPrinter();
+
+char* trim(char* str) {
+    char* end;
+
+    // Trim leading whitespace
+    while(isspace((unsigned char)*str)) str++;
+
+    if(*str == 0) { // All spaces?
+        return str;
+    }
+
+    // Trim trailing whitespace
+    end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+
+    // Write new null terminator
+    *(end+1) = 0;
+
+    return str;
+}
+
 
 int menu(){
     //1-file operations
@@ -646,8 +669,419 @@ int add_feature(int lineCount,int* featurexists){
 
 
 }
+//pID,Type,Name,Brand,Price
+
+int queryProd2(int featureExists){
+    int featureGiven = 0;
+    puts("How many features do you have: ");
+    scanf("%d",&featureGiven);
+    FILE *fp = fopen("products.txt","r");
+    char features[featureGiven][NEW_FATURE_NAME];
+    if(featureGiven>5){
+        
+        switch (featureGiven)
+        {
+        case 6:
+            fscanf(fp,"%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]",features[0],features[1],features[2],features[3],features[4],features[5]);
+            break;
+        
+        case 7:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6]);
+            break;
+        case 8:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7]);
+            break;
+        case 9:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8]);
+            break;
+        case 10:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9]);
+            break;
+        case 11:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10]);
+            break;
+        case 12:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11]);
+            break;
+        case 13:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11],features[12]);
+            break;
+        case 14:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11],features[12],features[13]);
+            break;
+        case 15:
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11],features[12],features[13],features[14]);
+            break;
+        
+        default:
+            break;
+        }
+    }else{
+            fscanf(fp,"%s,%c,%[^,],%[^,],%s",features[0],features[1],features[2],features[3],features[4]);
+
+    }
+
+    char filter[100];
+    printf("\nGive the filters u wanna use(brand,sutas,type,c):  ");
+    scanf("%s",filter);
+    char *token = strtok(filter,",");
+    char values[featureGiven][NEW_FEATURE_STR];
+    token = strtok(filter,",");
+    int valuesCount = 0;
+    int labelsCount = 0;
+    int ismatched = 0;
+    char comingLabel[15];
+    int searchpid;
+    char searchCh;
+    char searchName[15];
+    char searchBrand[15];
+    float searchPricehigh;
+    float searchPricelow;
+    char addedFeatures[featureGiven-5][15];
+   for(int j=0;j<6;j++){
+    puts(features[j]);
+   }
+   while (token != NULL)
+{
+    for(int m=0;m<featureGiven;m++){
+        if(strcmp(token,features[m]) == 0){
+            ismatched = 1;
+            labelsCount++;
+            strcpy(comingLabel,token);
+            puts("cominglabel");
+            puts(comingLabel);
+
+            break;
+        }
+        else{
+            ismatched = 0;
+        }
+    }
+    //pID,Type,Name,Brand,Price
+
+    if(!ismatched){
+        if(strcmp(comingLabel,"pId")){
+            sscanf(token,"%d",searchpid);
+        }
+        else if(strcmp(comingLabel,"Type")){
+            sscanf(token,"%c",&searchCh);
+        }
+        else if(strcmp(comingLabel,"Name")){
+            sscanf(token,"%s",searchName);
+        }
+        else if(strcmp(comingLabel,"Brand")){
+            sscanf(token,"%s",searchBrand);
+        }
+        else if(strcmp(comingLabel,"Price")){
+            sscanf(token,"%f-%f",&searchPricehigh,&searchPricelow);
+        }
+        else{
+            sscanf(token,"%s",addedFeatures[valuesCount]);
+        }
+        
+        
+    }
+    token = strtok(NULL,",");
+    labelsCount++;
+}//pID,Type,Name,Brand,Price
+    int tempid;
+    char tempch;
+    char tempnm[15];
+    char tempbran[15];
+    float price;
+    if(featureGiven>5){
+        char tempfeature[15];
+        int dinkCount;
+
+        switch (featureGiven)
+        {
+        case 6:
+            
+            while (fscanf(fp,"%d,%c,%[^,],%[^,],%f,%s",&tempid,&tempch,tempnm,tempbran,&price,tempfeature));
+            {
+                dinkCount=0;
+                printf("%d,%c,%s,%s,%f,%s\n",tempid,tempch,tempnm,tempbran,price,tempfeature);
+                
+                if(tempid == searchpid){
+                    dinkCount++;
+                }
+                if(tempch == searchCh){
+                    dinkCount++;
+                }
+                if(strcmp(tempnm,searchName)){
+                    dinkCount++;
+                }
+                if(strcmp(tempbran,searchBrand)){
+                    dinkCount++;
+                }
+                if(price<searchPricehigh && price>searchPricelow){
+                    dinkCount++;
+                }
+                for(int j=0;j<featureGiven-5;j++){
+                    if(strcmp(tempfeature,addedFeatures[j]) == 0){
+                        dinkCount++;
+                    }
+                }
+
+                if(dinkCount>labelsCount){
+                    printf("%d,%c,%s,%s,%f,%s\n",tempid,tempch,tempnm,tempbran,price,tempfeature);
+                }
+
+            }
+            
+            /* code */
+            break;
+        case 7:
+            /* code */
+            break;
+        case 8:
+            /* code */
+            break;
+        case 9:
+            /* code */
+            break;
+        case 10:
+            /* code */
+            break;
+        case 11:
+            /* code */
+            break;
+        case 12:
+            /* code */
+            break;
+        case 13:
+            /* code */
+            break;
+        case 14:
+            /* code */
+            break;
+        case 15:
+            /* code */
+            break;
+
+        default:
+            break;
+        }
+
+    }
+    else{
+
+    }
+    while (fscanf(fp,"%d"))
+    {
+        /* code */
+    }
+    
+
+    /*
+    int featurecount =0;
+    char featuresArray[20][15];
+    if(featureExists){
+        linecountReturn(&featurecount);
+    }
+    featurecount =+ 4;
 
 
+    char firtsline[MAX_LINE_LENGTH];
+    fgets(firtsline,MAX_LINE_LENGTH,fp);
+    char *token = strtok(firtsline,",");
+    int r =0;
+    while (token != NULL)
+    {
+        int i =0;
+        while(token[i] != '\n'){
+            token[i] = tolower(token[i]);
+            i++;
+        }
+        strcpy(featuresArray[r],token);
+        token = strtok(NULL,",");
+        r++;
+    }
+    char filter[100];
+    printf("\nGive the filters u wanna use(brand,sutas,type,c):  ");
+    scanf("%s",filter);
+    int i = 0;
+    while(filter[i] != '\n'){
+        if(filter[i] != ','){
+            filter[i] = tolower(filter[i]);
+
+        }
+        i++;
+    }
+    //char buffer[MAX_LINE_LENGTH];
+
+    //strcpy(values[valuesCount],token);
+      //          valuesCount++;
+
+    char values[featurecount][NEW_FEATURE_STR];
+    token = strtok(filter,",");
+    int valuesCount = 0;
+    int labelsCount = 0;
+    int ismatched = 0;
+    while (token != NULL)
+    {
+        
+        for(int m=0;m<featurecount;m++){
+            //puts(featuresArray[m]);
+            
+            
+            if(strcmp(token,featuresArray[m]) != 0){
+                ismatched = 0;
+            }
+            else{
+                ismatched = 1;
+                break;
+            }
+            
+        }
+        if(!ismatched){
+            strcpy(values[valuesCount],token);
+            valuesCount++;
+        }
+        token = strtok(NULL,",");
+        labelsCount++;
+        
+    }
+    
+    for(int i=0;i<valuesCount;i++){
+
+    }
+
+    labelsCount =  labelsCount - valuesCount;
+    */
+
+}
+
+/// @brief BURADA KALDIM
+/// @param featureExists 
+/// @return 
+int queryProd(int featureExists){
+    FILE *fp = fopen("products.txt","r");
+    int featurecount =0;
+    char featuresArray[20][15];
+    if(featureExists){
+        linecountReturn(&featurecount);
+    }
+
+    featurecount =+ 4;
+    printf("%d",featurecount);
+    return 0;
+    char firtsline[MAX_LINE_LENGTH];
+    fgets(firtsline,MAX_LINE_LENGTH,fp);
+    char *token = strtok(firtsline,",");
+    int r =0;
+    while (token != NULL)
+    {
+        int i =0;
+        while(token[i] != '\n'){
+            token[i] = tolower(token[i]);
+            i++;
+        }
+        strcpy(featuresArray[r],token);
+        token = strtok(NULL,",");
+        r++;
+    }
+    char filter[100];
+    printf("\nGive the filters u wanna use(brand,sutas,type,c,price,high-low):  ");
+    scanf("%s",filter);
+    int i = 0;
+    while(filter[i] != '\n'){
+        if(filter[i] != ','){
+            filter[i] = tolower(filter[i]);
+
+        }
+        i++;
+    }
+    char values[featurecount][NEW_FEATURE_STR];
+    token = strtok(filter,",");
+    int valuesCount = 0;
+   
+   
+    char comingLabel[15];
+    float priceHigh;
+    float priceLow;
+    
+    while (token != NULL) {
+    int found = 0;
+    comingLabel[0] = '\0';
+
+    for (int m = 0; m < featurecount; m++) {
+        if (strcasecmp(token, featuresArray[m]) == 0) {
+            printf("Match found: %s\n", token);
+            strcpy(comingLabel, token);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        if (strcasecmp(comingLabel, "price") == 0) {
+            puts(token);
+            sscanf(token, "%f-%f", &priceHigh, &priceLow);
+            printf("pricehigh : %.2f\n",priceHigh);
+        } else {
+            strcpy(values[valuesCount], token);
+            valuesCount++;
+        }
+    }
+    token = strtok(NULL, ",");
+}
+
+
+    
+   
+    char line[MAX_LINE_LENGTH];        
+    
+    int matchfound = 0;
+    while(fgets(line,MAX_LINE_LENGTH,fp)){  
+
+    
+    int dingedCount = 0;
+    for(int i=0;i<valuesCount;i++){
+        char lineCopy[MAX_LINE_LENGTH];
+        char lineCopy2[MAX_LINE_LENGTH];
+        strcpy(lineCopy, line);
+        strcpy(lineCopy2, line);
+
+
+        
+        float tempPrice = 0.0;
+        sscanf(lineCopy2, "%*d,%*c,%*s,%*s,%f%*[^\n]\n", &tempPrice);
+        //sscanf(lineCopy,"%*[^0-9]%f%*[^0-9]\n",&tempPrice);
+        puts("temp price: ");
+        printf("%.2f",tempPrice);
+        token = strtok(lineCopy, ",");
+        
+        
+        //token = strtok(line,",");
+        while(token != NULL){
+            if(strcasecmp(token,values[i]) == 0){
+                dingedCount++;
+                
+                break;
+            }
+            else {
+            }
+
+            token = strtok(NULL,",");
+        }
+    }
+    
+    if(dingedCount >= valuesCount){
+        puts(line);
+        matchfound++;
+        puts("Dinged count: ");
+        printf("%d",dingedCount);
+        puts("values count: ");
+        printf("%d",valuesCount);
+    }
+    }
+    if(matchfound){
+    
+    }else{
+        puts("None matched products had found.");
+    }
+
+}
 int queryProducts(int featureexists){
     FILE *fp = fopen("products.txt","r");
     
@@ -849,6 +1283,11 @@ int main(){
     int linecount;
     int tempchoice;
     linecount = linecountReturn(&featureCount);
+    //add_feature(linecount,&featureExists);
+    queryProd(1);
+    return 0;
+    queryProd(0);
+    return 0;
     searchProducts(featureExists,linecount);
     return 0;
     add_feature(linecount,&featureExists);
