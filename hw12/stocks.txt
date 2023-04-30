@@ -11,11 +11,11 @@ sID,pID,branch,current_stock
 10,8,Antalya,60
 11,15,Istanbul,30
 12,12,Kocaeli,65
-13,6,Izmir,10
-14,13,Bursa,80
+13,13,Izmir,10
+14,5,Bursa,80
 15,9,Ankara,45
 16,4,Adana,5
 17,10,Mugla,15
 18,17,Kayseri,35
 19,1,Trabzon,15
-20,18,Antalya,70
+20,5,Antalya,70

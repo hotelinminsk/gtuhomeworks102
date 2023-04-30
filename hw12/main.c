@@ -3,25 +3,13 @@
 #include <string.h>
 #include <strings.h>
 #include <ctype.h>
-#define MAX_PRODUCT_NAME 8
-#define MAX_BRAND_NAME 5
+#define MAX_PRODUCT_NAME 9
+#define MAX_BRAND_NAME 9
 #define MAX_BRANCH_NAME 15
 #define NEW_FATURE_NAME 9
 #define NEW_FEATURE_STR 20
 #define MAX_FEATURES 20
 #define MAX_LINE_LENGTH 255
-
-struct product{
-    int pid;
-    char type;
-    char *name;
-    char *brand;
-    float price;
-    char **features;
-
-};
-typedef struct product Product;
-//pID,Type,Name,Brand,Price
 
 
 
@@ -156,75 +144,7 @@ int fileOperations(){
     }
     
 }
-//pID,Type,Name,Brand,Price
-/*
- int pid;
-    char type;
-    char *name;
-    char *brand;
-    float price;
-    char **features;
-*/
-Product* strctFiller(){
-    
-    int featureCount;
-    //printf("here is okay.");
 
-    int proCount = linecountReturn(&featureCount);
-   // printf("linoecount return = %d",proCount);
-    Product *productArray = (Product*)malloc(proCount * sizeof(Product));
-    FILE *fp = fopen("products.txt","r");
-    char buffer[MAX_LINE_LENGTH];
-    fgets(buffer,MAX_LINE_LENGTH,fp); //skipping the first line
-    int counter = 0;
-    while(fgets(buffer,MAX_LINE_LENGTH,fp)){
-        productArray[counter].name = (char*)malloc(15 * sizeof(char));
-        productArray[counter].brand = (char*)malloc(15 * sizeof(char));
-        
-        if(featureCount > 0){
-            char restofLine[MAX_LINE_LENGTH];
-            sscanf(buffer,"%d,%c,%s,%s,%f,%[^\n]",&productArray[counter].pid,&productArray[counter].type,productArray[counter].name,productArray[counter].brand,&productArray[counter].price,restofLine);            
-            int x = 0;
-
-            while(restofLine[x] != '\0'){
-                x++;
-            }
-            restofLine[x] = '\0';
-            //restofLine[strcspn(restofLine, "\n")] = '\0'; //strip newline character
-            char *token = strtok(restofLine,",");
-            int j = 0;
-            productArray[counter].features = (char**)malloc(featureCount * sizeof(char*));
-            
-            while(token != NULL){
-                printf("in the token loop.");
-                productArray[counter].features[j] = (char*)malloc((NEW_FEATURE_STR+1) * sizeof(char));
-                int k=0;
-                while(token[k] != '\0'){
-                     productArray[counter].features[j][k] = token[k];
-                    k++;
-                }
-                productArray[counter].features[j][k] = '\0';
-                //strcpy(productArray[counter].features[j])
-                token = strtok(NULL,",");
-
-            }
-
-        }
-        else{
-            puts(buffer);
-            //sscanf(buffer,"%d,%c,%s,%s,%f,%*[^\n]",&productArray[counter].pid,&productArray[counter].type,productArray[counter].name,productArray[counter].brand,&productArray[counter].price);
-            sscanf(buffer,"%d,%c,%[^,],%[^,],%f%*[^\n]",&productArray[counter].pid,&productArray[counter].type,productArray[counter].name,productArray[counter].brand,&productArray[counter].price);
-            printf("%f",productArray[counter].price);
-        }
-        counter++;
-    }
-
-    //printf("%s,%d",productArray[0].name,productArray[0].pid);
-
-    fclose(fp);
-    
-    return productArray;
-}
 
 int updateAproduct(){
     int featurecount;
@@ -240,6 +160,10 @@ int updateAproduct(){
     float price;
     int choosedid;
     int linec = 0;
+    int featuresCount = 0;
+    featureCount(&featuresCount);
+
+    char features[featuresCount][15];
     prodPrinter();
     do
     {
@@ -253,44 +177,67 @@ int updateAproduct(){
         }
         
         scanf("%d",&choosedid);
-        if(choosedid>linenums){
+        if(choosedid>linenums-1){
             errorflag =1;
         }
         else{errorflag=0;}
     } while (errorflag);
+
+
+
+
+
+
+    fgets(buffer,MAX_LINE_LENGTH,fp);
+    puts(buffer);
+    fputs(buffer,fp2);
+    char *token = strtok(buffer,",");
+    int r=0;
+    while(token != NULL){
+        strcpy(features[r],token);
+        r++;
+        token = strtok(NULL,",");
+    }
+    char newg[15];
+    char givenlabel[15];
+    int chosenlabel = 99;
     
+
     
     while(fgets(buffer,MAX_LINE_LENGTH,fp)){
         int tempId;
-        if(linec < choosedid){
+        sscanf(buffer,"%d,%*[^\n]\n",&tempId);
+        if(tempId < choosedid){
             fputs(buffer,fp2);
         }
-        else if(linec == choosedid){
+        else if(tempId == choosedid){
             //pID,Type,Name,Brand,Price
+            token = strtok(buffer,",");
+            int m=0;
+            while(token != NULL){
+                if(m==chosenlabel){
+                    if(m==featuresCount-1){
+                        fprintf(fp2,"%s",newg);
+                    }else{
+                        fprintf(fp2,"%s,",newg);
 
-            //sscanf(buffer,"%d%*[^\n]",&tempId);
-            printf("\nGive the updated type name: ");
-            scanf(" %c",&type);
-            while(getchar() != '\n');
-            printf("\nGive the updated name: ");
-            scanf("%s",tempname);
-            printf("\nGive the updated brand: ");
-            scanf("%s",brand);
-            printf("\nGive updated price: ");
-            scanf("%f",&price);
-            fprintf(fp2,"%d,%c,%s,%s,%.2f",choosedid,type,tempname,brand,price);
-            for(int j=0;j<featurecount;j++){
-                char fname[NEW_FEATURE_STR];
-                printf("\nGive the updated feature name: ");
-                scanf("%s",fname);
-                fprintf(fp2,",%s",fname);
+                    }                    
+                }else{
+                    if(m==featuresCount-1){
+                        fprintf(fp2,"%s",token);
+                    }else{
+                        fprintf(fp2,"%s,",token);
+                    }
+                    
+                }
+                m++;
+                token = strtok(NULL,",");
             }
-            fprintf(fp2,"\n");
         }
         else{
             fputs(buffer,fp2);
         }
-        linec++;
+        
     }
     fclose(fp);
     fclose(fp2);
@@ -364,6 +311,149 @@ int deleteAproduct(int featureExist){
 }
 
 
+int stockQueryop1(){
+    int givenpid;
+    int errorFlag =0;
+    char bname[15];
+    char bnameGiven[15];
+    int stockValue =0;
+
+
+    int lineCount =0;
+    FILE *fp = fopen("products.txt","r");
+    char line[MAX_LINE_LENGTH];
+    while(fgets(line,MAX_LINE_LENGTH,fp)){
+        puts(line);
+        lineCount++;
+    }
+    fclose(fp);
+    
+    do
+    {
+        if(errorFlag){
+            puts("Please give and valid id.");
+        }
+        else{
+            puts("Please give the id of product u wanna query the stock values.");
+        }
+        scanf("%d",&givenpid);
+        if(givenpid > lineCount-1 || givenpid < 1){
+            errorFlag = 1;
+        }else{
+            errorFlag =0;
+        }
+    } while (errorFlag);
+    
+    //sID,pID,branch,current_stock
+
+    fp = fopen("stocks.txt","r");
+    int r=0;
+    while (fgets(line,MAX_LINE_LENGTH,fp))
+    {   
+        if(r==0){
+            puts(line);
+        }else{
+            sscanf(line,"%*d,%*d,%[^,],%*d\n",bname);
+            puts(bname);
+        }
+        r++;
+    }
+    r=0;
+    rewind(fp);
+    bname[0] = '\0';
+    printf("\nPlease give a branch-name: ");
+    scanf("%s",bnameGiven);
+    while(fgets(line,MAX_LINE_LENGTH,fp)){
+        int tempid;
+        if(r==0){
+
+        }else{
+            sscanf(line,"%*d,%d,%[^,],%d\n",&tempid,bname,&stockValue);
+            
+            
+            if(strcasecmp(bname,bnameGiven)==0 && tempid == givenpid){
+               // printf("productId = %d branch = %s stockvalue = %d\n",tempid,bname,stockValue);
+            }
+            
+        }
+        r++;
+        fclose(fp);
+    }
+    
+
+
+}
+
+int brandStockControl(){//burada kladim
+    char givenBrand[MAX_BRAND_NAME];
+    int givenpid;
+    printf("\nGive an brand name to list all of their products with stock values:");
+    scanf("%s",givenBrand);
+    FILE *fp = fopen("products.txt","r");
+    char line[MAX_LINE_LENGTH];
+    int r =0;
+    int matchedcount =0;
+    int *pids = malloc(10*sizeof(int));
+    float *prices = malloc(10*sizeof(float));
+    int *stockvals = malloc(30*sizeof(int));
+
+    while(fgets(line,MAX_LINE_LENGTH,fp)){
+       
+        if(r==0){
+
+        }
+        else{
+            char tempBrand[15];
+            float temprice;
+            sscanf(line,"%d,%*[^,],%*[^,],%[^,],%f",&givenpid,tempBrand,&temprice);
+            
+            if(strcmp(givenBrand,tempBrand)==0){
+            
+                pids[matchedcount] = givenpid;
+                prices[matchedcount] = temprice;
+                matchedcount++;
+            }
+        }
+        r++;
+    }
+    fclose(fp);
+    FILE *fp2 = fopen("stocks.txt","r");
+   
+
+    while(fgets(line,MAX_LINE_LENGTH,fp2)){
+        int tempId;
+        int tempstock;
+        sscanf(line,"%*[^,],%d,%*[^,],%d\n",&tempId,&tempstock);
+        int f=0;
+        for(int j=0;j<matchedcount;j++){
+            if(tempId == pids[j]){
+                stockvals[f] = tempstock;
+                f++;
+
+            }
+        }
+    }
+
+    for(int i=0;i<20;i++){
+        printf("%d\n",stockvals[i]);
+    }
+
+    char *entry = (char*)malloc(155 * sizeof(char));
+    char **twoD = (char**)malloc(matchedcount * sizeof(char*));
+    for(int m=0;m<matchedcount;m++){
+        twoD[m] = (char*)malloc(155*sizeof(char));
+        sprintf(entry,"pid = %d, price = %.2f, stockValue = %d\n",pids[m],prices[m],stockvals[m]);
+        strcpy(twoD[m],entry);
+
+    }
+    free(entry);
+
+    for(int i=0;i<matchedcount;i++){
+        puts(twoD[i]);
+    }
+
+
+}
 
 int updateAstockEntry(){
     int linecount = 0;
@@ -649,7 +739,7 @@ int add_feature(int lineCount,int* featurexists){
     FILE *fp2 = fopen("requ.txt","w");
     fputs(buffer,fp2);
     
-    char tempLine[MAX_LINE_LENGTH];
+    char tempLine[265];
     while(fgets(tempLine,MAX_LINE_LENGTH,fp)){
         char firstline[MAX_LINE_LENGTH];
         sscanf(tempLine,"%[^\n]",firstline);
@@ -669,303 +759,30 @@ int add_feature(int lineCount,int* featurexists){
 
 
 }
-//pID,Type,Name,Brand,Price
 
-int queryProd2(int featureExists){
-    int featureGiven = 0;
-    puts("How many features do you have: ");
-    scanf("%d",&featureGiven);
+int featureCount(int *fc){
     FILE *fp = fopen("products.txt","r");
-    char features[featureGiven][NEW_FATURE_NAME];
-    if(featureGiven>5){
-        
-        switch (featureGiven)
-        {
-        case 6:
-            fscanf(fp,"%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]",features[0],features[1],features[2],features[3],features[4],features[5]);
-            break;
-        
-        case 7:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6]);
-            break;
-        case 8:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7]);
-            break;
-        case 9:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8]);
-            break;
-        case 10:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9]);
-            break;
-        case 11:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10]);
-            break;
-        case 12:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11]);
-            break;
-        case 13:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11],features[12]);
-            break;
-        case 14:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11],features[12],features[13]);
-            break;
-        case 15:
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",features[0],features[1],features[2],features[3],features[4],features[5],features[6],features[7],features[8],features[9],features[10],features[11],features[12],features[13],features[14]);
-            break;
-        
-        default:
-            break;
-        }
-    }else{
-            fscanf(fp,"%s,%c,%[^,],%[^,],%s",features[0],features[1],features[2],features[3],features[4]);
+    char c;
 
-    }
-
-    char filter[100];
-    printf("\nGive the filters u wanna use(brand,sutas,type,c):  ");
-    scanf("%s",filter);
-    char *token = strtok(filter,",");
-    char values[featureGiven][NEW_FEATURE_STR];
-    token = strtok(filter,",");
-    int valuesCount = 0;
-    int labelsCount = 0;
-    int ismatched = 0;
-    char comingLabel[15];
-    int searchpid;
-    char searchCh;
-    char searchName[15];
-    char searchBrand[15];
-    float searchPricehigh;
-    float searchPricelow;
-    char addedFeatures[featureGiven-5][15];
-   for(int j=0;j<6;j++){
-    puts(features[j]);
-   }
-   while (token != NULL)
-{
-    for(int m=0;m<featureGiven;m++){
-        if(strcmp(token,features[m]) == 0){
-            ismatched = 1;
-            labelsCount++;
-            strcpy(comingLabel,token);
-            puts("cominglabel");
-            puts(comingLabel);
-
-            break;
-        }
-        else{
-            ismatched = 0;
-        }
-    }
-    //pID,Type,Name,Brand,Price
-
-    if(!ismatched){
-        if(strcmp(comingLabel,"pId")){
-            sscanf(token,"%d",searchpid);
-        }
-        else if(strcmp(comingLabel,"Type")){
-            sscanf(token,"%c",&searchCh);
-        }
-        else if(strcmp(comingLabel,"Name")){
-            sscanf(token,"%s",searchName);
-        }
-        else if(strcmp(comingLabel,"Brand")){
-            sscanf(token,"%s",searchBrand);
-        }
-        else if(strcmp(comingLabel,"Price")){
-            sscanf(token,"%f-%f",&searchPricehigh,&searchPricelow);
-        }
-        else{
-            sscanf(token,"%s",addedFeatures[valuesCount]);
-        }
-        
-        
-    }
-    token = strtok(NULL,",");
-    labelsCount++;
-}//pID,Type,Name,Brand,Price
-    int tempid;
-    char tempch;
-    char tempnm[15];
-    char tempbran[15];
-    float price;
-    if(featureGiven>5){
-        char tempfeature[15];
-        int dinkCount;
-
-        switch (featureGiven)
-        {
-        case 6:
-            
-            while (fscanf(fp,"%d,%c,%[^,],%[^,],%f,%s",&tempid,&tempch,tempnm,tempbran,&price,tempfeature));
-            {
-                dinkCount=0;
-                printf("%d,%c,%s,%s,%f,%s\n",tempid,tempch,tempnm,tempbran,price,tempfeature);
-                
-                if(tempid == searchpid){
-                    dinkCount++;
-                }
-                if(tempch == searchCh){
-                    dinkCount++;
-                }
-                if(strcmp(tempnm,searchName)){
-                    dinkCount++;
-                }
-                if(strcmp(tempbran,searchBrand)){
-                    dinkCount++;
-                }
-                if(price<searchPricehigh && price>searchPricelow){
-                    dinkCount++;
-                }
-                for(int j=0;j<featureGiven-5;j++){
-                    if(strcmp(tempfeature,addedFeatures[j]) == 0){
-                        dinkCount++;
-                    }
-                }
-
-                if(dinkCount>labelsCount){
-                    printf("%d,%c,%s,%s,%f,%s\n",tempid,tempch,tempnm,tempbran,price,tempfeature);
-                }
-
-            }
-            
-            /* code */
-            break;
-        case 7:
-            /* code */
-            break;
-        case 8:
-            /* code */
-            break;
-        case 9:
-            /* code */
-            break;
-        case 10:
-            /* code */
-            break;
-        case 11:
-            /* code */
-            break;
-        case 12:
-            /* code */
-            break;
-        case 13:
-            /* code */
-            break;
-        case 14:
-            /* code */
-            break;
-        case 15:
-            /* code */
-            break;
-
-        default:
-            break;
+    while((c=getc(fp)) != '\n'){
+        if(c == ','){
+            *fc += 1;
         }
 
     }
-    else{
+    *fc += 1;
 
-    }
-    while (fscanf(fp,"%d"))
-    {
-        /* code */
-    }
-    
-
-    /*
-    int featurecount =0;
-    char featuresArray[20][15];
-    if(featureExists){
-        linecountReturn(&featurecount);
-    }
-    featurecount =+ 4;
-
-
-    char firtsline[MAX_LINE_LENGTH];
-    fgets(firtsline,MAX_LINE_LENGTH,fp);
-    char *token = strtok(firtsline,",");
-    int r =0;
-    while (token != NULL)
-    {
-        int i =0;
-        while(token[i] != '\n'){
-            token[i] = tolower(token[i]);
-            i++;
-        }
-        strcpy(featuresArray[r],token);
-        token = strtok(NULL,",");
-        r++;
-    }
-    char filter[100];
-    printf("\nGive the filters u wanna use(brand,sutas,type,c):  ");
-    scanf("%s",filter);
-    int i = 0;
-    while(filter[i] != '\n'){
-        if(filter[i] != ','){
-            filter[i] = tolower(filter[i]);
-
-        }
-        i++;
-    }
-    //char buffer[MAX_LINE_LENGTH];
-
-    //strcpy(values[valuesCount],token);
-      //          valuesCount++;
-
-    char values[featurecount][NEW_FEATURE_STR];
-    token = strtok(filter,",");
-    int valuesCount = 0;
-    int labelsCount = 0;
-    int ismatched = 0;
-    while (token != NULL)
-    {
-        
-        for(int m=0;m<featurecount;m++){
-            //puts(featuresArray[m]);
-            
-            
-            if(strcmp(token,featuresArray[m]) != 0){
-                ismatched = 0;
-            }
-            else{
-                ismatched = 1;
-                break;
-            }
-            
-        }
-        if(!ismatched){
-            strcpy(values[valuesCount],token);
-            valuesCount++;
-        }
-        token = strtok(NULL,",");
-        labelsCount++;
-        
-    }
-    
-    for(int i=0;i<valuesCount;i++){
-
-    }
-
-    labelsCount =  labelsCount - valuesCount;
-    */
-
+    return *fc;
 }
-
-/// @brief BURADA KALDIM
-/// @param featureExists 
-/// @return 
 int queryProd(int featureExists){
     FILE *fp = fopen("products.txt","r");
     int featurecount =0;
-    char featuresArray[20][15];
-    if(featureExists){
-        linecountReturn(&featurecount);
-    }
+    
+    featureCount(&featurecount);
+    char featuresArray[featurecount][16];
 
-    featurecount =+ 4;
-    printf("%d",featurecount);
-    return 0;
+    
+   
     char firtsline[MAX_LINE_LENGTH];
     fgets(firtsline,MAX_LINE_LENGTH,fp);
     char *token = strtok(firtsline,",");
@@ -995,33 +812,40 @@ int queryProd(int featureExists){
     char values[featurecount][NEW_FEATURE_STR];
     token = strtok(filter,",");
     int valuesCount = 0;
-   
-   
-    char comingLabel[15];
     float priceHigh;
     float priceLow;
+    int is_price =0;
+    
     
     while (token != NULL) {
     int found = 0;
-    comingLabel[0] = '\0';
+    
+    
+    
 
     for (int m = 0; m < featurecount; m++) {
-        if (strcasecmp(token, featuresArray[m]) == 0) {
-            printf("Match found: %s\n", token);
-            strcpy(comingLabel, token);
+        
+        
+        if (strcmp(trim(token), trim(featuresArray[m])) == 0) {
+            printf("Match found: %s\n", trim(token));
             found = 1;
+            is_price =1;
             break;
         }
     }
+
+
+
+    
+    
     if (!found) {
-        if (strcasecmp(comingLabel, "price") == 0) {
-            puts(token);
-            sscanf(token, "%f-%f", &priceHigh, &priceLow);
-            printf("pricehigh : %.2f\n",priceHigh);
-        } else {
-            strcpy(values[valuesCount], token);
-            valuesCount++;
+        if(is_price){
+            sscanf(token,"%f-%f",&priceHigh,&priceLow);
+            is_price=0;
         }
+          else{
+            strcpy(values[valuesCount], token);}  
+            valuesCount++;
     }
     token = strtok(NULL, ",");
 }
@@ -1033,22 +857,21 @@ int queryProd(int featureExists){
     
     int matchfound = 0;
     while(fgets(line,MAX_LINE_LENGTH,fp)){  
-
     
     int dingedCount = 0;
+    
     for(int i=0;i<valuesCount;i++){
         char lineCopy[MAX_LINE_LENGTH];
         char lineCopy2[MAX_LINE_LENGTH];
         strcpy(lineCopy, line);
-        strcpy(lineCopy2, line);
+        
 
 
         
         float tempPrice = 0.0;
-        sscanf(lineCopy2, "%*d,%*c,%*s,%*s,%f%*[^\n]\n", &tempPrice);
-        //sscanf(lineCopy,"%*[^0-9]%f%*[^0-9]\n",&tempPrice);
-        puts("temp price: ");
-        printf("%.2f",tempPrice);
+    
+       
+       
         token = strtok(lineCopy, ",");
         
         
@@ -1069,10 +892,6 @@ int queryProd(int featureExists){
     if(dingedCount >= valuesCount){
         puts(line);
         matchfound++;
-        puts("Dinged count: ");
-        printf("%d",dingedCount);
-        puts("values count: ");
-        printf("%d",valuesCount);
     }
     }
     if(matchfound){
@@ -1082,201 +901,17 @@ int queryProd(int featureExists){
     }
 
 }
-int queryProducts(int featureexists){
-    FILE *fp = fopen("products.txt","r");
-    
-    char firstline[MAX_LINE_LENGTH];
-    int featurecount = 0;
-    int valuecount = 0;
-    int linecount = linecountReturn(&featurecount);
-    featurecount = featurecount +4;
-    fgets(firstline,MAX_LINE_LENGTH,fp);
-    if(featureexists){
-        char features[MAX_FEATURES][15];
-        char filters_match[MAX_FEATURES][15];
-        char values[MAX_FEATURES][15];
-        int match_cound =0;
-        char *token = strtok(firstline,",");
-        int r=0;
-        while(token != NULL){
-            strcpy(features[r],token);
-            token = strtok(NULL,",");
-            r++;
-        }
-        char filter[100];
-        printf("\nGive the filters u wanna use case sensitive (Brand,Sutas,Type,C): ");
-        scanf("%s",filter);
-        token = strtok(filter,",");
-        while(token != NULL){
-            int matched = 0;
-            for(int m=0;m<r;m++){
-                if(strcmp(token,features[m]) == 0){
-                    strcpy(filters_match[match_cound],token);
-                    match_cound++;
-                    matched = 1;
-                    break;
-                }
-            }
-            if(!matched){
-                strcpy(values[valuecount],token);
-                valuecount++;
-            }
-            token = strtok(NULL,",");
-        }
-        
-        //lastSearch(filters_match,values);
-        }
-    
-    else{
-        char features[5][15];
-        char filters_matched[5][15];
-        char values[5][15];
-        int match_f = 0;
-        char *token = strtok(firstline,",");
-        int r=0;
-        while(token != NULL){
-            strcpy(features[r],token);
-            token = strtok(NULL,",");
-            r++;
-        }
 
-        char filter[100];
-        printf("\nGive the filters u wanna use case sensitive (Brand,Sutas,Type,C): ");
-        scanf("%s",filter);
-        token = strtok(filter,",");
-        while(token != NULL){
-            int matched = 0;
-            for(int m=0;m<r;m++){
-                if(strcmp(token,features[m]) == 0){
-                    strcpy(filters_matched[match_f],token);
-                    match_f++;
-                    matched = 1;
-                    break;
-                }
-            }
-            if(!matched){
-                strcpy(values[valuecount],token);
-                valuecount++;
-            }
-            token = strtok(NULL,",");
-        }
-        
-       // lastSearch(filters_matched,values);
-    }
-}
-
-
-int searchProducts(int featureexists,int linecount){
-    int schoice;
-    int choice;
-    float priceH;
-    float priceL;
-    char brand1[15];
-    char type1;
-    char matchedstrings[10][MAX_LINE_LENGTH];
-    char *matchedstring = (char*)malloc(MAX_LINE_LENGTH * sizeof(char));
-    int matchCount =0;
-    printf("\n1)List all products\n2)Filter products by brand,type,price or a user-defined feature\n3)Back to main menu.");
-    scanf("%d",&schoice);
-    FILE *fp = fopen("products.txt","r");
-    char buffer[MAX_LINE_LENGTH];
-
-    switch (schoice)
-    {
-    case 1:
-        fgets(buffer,MAX_LINE_LENGTH,fp);
-        while(fgets(buffer,MAX_LINE_LENGTH,fp)){
-            puts(buffer);
-        }
-        break;
-    
-    case 2:
-        
-        printf("\n1)Filter by brand\n2)Filter by type\n3)Filter by price\n4)Filter by 2 or more features: ");
-        scanf("%d",&choice);
-        while(getchar() != '\n');
-        switch (choice)
-
-        {
-        case 1:
-            
-            printf("\nGive an brand name to filter: ");
-            scanf("%s",brand1);
-            Product *productArray = (Product*)malloc(linecount * sizeof(Product));
-            productArray=strctFiller();
-            for(int i=0;i<linecount;i++){
-                
-                if(strcmp(productArray[i].brand,brand1)==0){
-                    //pID,Type,Name,Brand,Price
-                    sprintf(matchedstring,"%d,%c,%s,%s,%.2f",productArray[i].pid,productArray[i].type,productArray[i].name,productArray[i].brand,productArray[i].price);
-                    strcpy(matchedstrings[i],matchedstring);
-                    matchCount++;
-                    
-                }
-                
-                
-            }
-            free(productArray);
-            free(matchedstring);
-            
-            break;
-        case 2:
-            printf("\nGive an type name to filter: ");
-            scanf("%c",&type1);
-            productArray = (Product*)malloc(linecount * sizeof(Product));
-            productArray=strctFiller();
-            for(int i=0;i<linecount;i++){
-                
-                if(productArray[i].type = type1){
-                    //pID,Type,Name,Brand,Price
-                    sprintf(matchedstring,"%d,%c,%s,%s,%.2f",productArray[i].pid,productArray[i].type,productArray[i].name,productArray[i].brand,productArray[i].price);
-                    strcpy(matchedstrings[i],matchedstring);
-                    matchCount++;
-                    puts(matchedstring);
-                }
-                
-                
-            }
-            free(productArray);
-            free(matchedstring);
-            break;
-        case 3:
-            productArray = (Product*)malloc(linecount * sizeof(Product));
-            productArray=strctFiller();
-            printf("\nGive the highest price: ");
-            scanf("%f",&priceH);
-            printf("\nGive the lower price: ");
-            scanf("%f",&priceL);
-            for(int i=0;i<linecount;i++){
-                
-                if(productArray[i].price>priceL && productArray[i].price<priceH){
-                    //pID,Type,Name,Brand,Price
-                    sprintf(matchedstring,"%d,%c,%s,%s,%.2f",productArray[i].pid,productArray[i].type,productArray[i].name,productArray[i].brand,productArray[i].price);
-                    strcpy(matchedstrings[i],matchedstring);
-                    matchCount++;
-                    puts(matchedstring);
-                }
-                
-                
-            }
-            free(productArray);
-            free(matchedstring);
-            
-            break;
-            
-        default:
-            break;
-        }
-        break;
-    default:
-        break;
-    }
-    fclose(fp);
-}
 
 
 
 int main(){
+    brandStockControl();
+    return 0;
+    updateAproduct();
+    return 0;
+    stockQueryop1();
+    return 0;
     int featureCount;
     int featureExists;
     int menuchoice;
@@ -1284,17 +919,14 @@ int main(){
     int tempchoice;
     linecount = linecountReturn(&featureCount);
     //add_feature(linecount,&featureExists);
-    queryProd(1);
+    queryProd(0);
     return 0;
     queryProd(0);
     return 0;
     searchProducts(featureExists,linecount);
     return 0;
     add_feature(linecount,&featureExists);
-    Product *productArray = (Product*)malloc(linecount * sizeof(Product));
-    productArray=strctFiller();
-    printf("%d - %s - %s\n",productArray[0].pid,productArray[0].name,productArray[0].brand);
-
+    
     
     menuw:
 
@@ -1343,9 +975,57 @@ int main(){
     
     case 2:
         //query products
+        tempchoice =0;
+        puts("1)List all products.");
+        puts("2)Filter products by,brand,type,price,or a user-defined feature.");
+        puts("3)Back to main menu.");
+        scanf("%d",&tempchoice);
+        switch (tempchoice)
+        {
+        case 1:
+            FILE *fp = fopen("products.txt","r");
+            char comingChar;
+            while(feof(fp) != 0){
+                comingChar = getc(fp);
+                putchar(comingChar);
+            }
+            fclose(fp);
+            break;
+        
+        case 2:
+            queryProd(featureExists);
+            break;
+        case 3:
+            goto menuw;
+            break;
+        default:
+            break;
+        }
+
         break;
     case 3:
+        tempchoice =0;
         //check stock status
+        puts("1)Query the stock of a given product in a specified branch.");
+        //takes product id and branch name
+        puts("2)Query to list the stock of all products in a branch.");
+        
+        puts("3)List out-of-stock products in a branch.");
+        puts("4)Return to main menu.");
+        scanf("%d",&tempchoice);
+        switch (tempchoice)
+        {
+        case 1:
+            stockQueryop1();
+            break;
+        case 2:
+            brandStockControl();
+            break;
+        case 3:
+
+        default:
+            break;
+        }
         break;
     case 4:
         //stock control by brand
