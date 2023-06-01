@@ -1,0 +1,18 @@
+
+  check_status():After  the move  is made,  the  consequences  of  the  last  move  
+  need  to  be  checked.  This function takes the snake and the board as input and returns 1 if the game is over, otherwise it returns 0. 
+  In this function, three conditions need to be checked:1.Does the head of the snake hit its own body?2.Does the snake collide with the wall?3.Does the
+   snake encounter an obstacle that has x number of blocks, where x is greater than the length of the snake? The game is over if any of these conditions
+    are met, so the function returns 1 in that case.
+    update():If  the  game  is  not  over,  the  play()  function  calls  the  update()  function.  In
+      this  function,  the program updates the coordinates of the snake's body, considering whether the snake ate abait in the last move or not. Then, 
+      the function updates the bait and obstacles on the board. If the snake ate a bait in  the  last  move,  the  length  of  the  snake  is  increased 
+       by one  block. Otherwise, the  rest  of  the  body  is shifted to keep the body and headconnected. There can be only one bait at a time on the 
+       board. This function  also  updates  the  obstacles  every 5 moves.  The  obstacles  appear  randomly on  the  board,  and there can be a 
+       maximum of 3 obstacles at a time. Additionally, the height of obstaclescan be increased by adding new obstacle blocks on top of existing ones.
+       If the snake encounters an obstacle that is shorter than  its  body,  
+it  can  capture  the  block  by  destroying the  obstacle. This  is  done  by  deleting the  nested
+
+
+
+
