@@ -1,0 +1,51 @@
+ISBN,Title,Author,PublicationYear,ReservedStatus,StuId
+152907715X,American Psycho,Bret Easton Ellis,2022,0,0
+9944885452,Babalar ve Oğullar,Turgenyev,2017,0,0
+6052957921,Otomatik Portakal,Anthony Burgess,2016,0,0
+975458902X,Suç ve Ceza,Dostoyevski,2016,0,0
+6053607037,İnsan Neyle Yaşar?,Tolstoy,2018,0,0
+9944888001,Romeo ve Juliet,Shakespeare,2010,0,0
+6053609900,Bir İdam Mahkumunun Son Günü,Victor Hugo,2016,0,0
+9754586985,Denemeler,Montaigne,2006,0,0
+9944883069,Hamlet,Shakespeare,2017,0,0
+9754588597,Macbeth,Shakespeare,2018,0,0
+6258401473,İnsanlığımı Yitirirken,Osamu Dazai,2022,0,0
+6051981837,Gece Yarısı Kütüphanesi,Matt Haig,2021,0,0
+6057246705,Yaşadım Demek İçin Ne Yapmalı?,Büşra Sanay,2023,1,210104004004
+9756902167,Cesur Yeni Dünya,Aldous Huxley,2016,0,0
+6054054201,Man's Search for Meaning,Tolstoy,2017,0,0
+6053322695,Savaş Sanatı,Sun Tzu,2014,0,0
+9751038677,Dahi Diktatör,Celal Şengör,2018,0,0
+9755391460,Nietzsche Ağladığında,Irvin Yalom,2000,0,0
+6052954027,Kendime Düşünceler,Marcus Aurelius,2018,0,0
+6053322121,Martin Eden,Jack London,2014,0,0
+9750760093,Kuru Kız,Ayfer Tunç,2023,0,0
+6258475418,Şeytanın Çırağı,Akuma deshi,2021,0,0
+6053758728,Kadınlar Ülkesi,Charlotte Perkins Gilman,2018,0,0
+6254053705,Beyaz Zambaklar Ülkesi,Grigori Petrov,2021,0,0
+6052650028,Lanetli Tavşan,Bora Chung,2022,0,0
+6051982191,İnsanlar,Matt Haig,2022,0,0
+9750736869,Huzursuzluğun Kitabı,Fernando Pessoa,2006,0,0
+6258401465,Öğrenci Kız,Osamu Dazai,2022,0,0
+6053757810,Fahrenheit 451,Ray Bradbury,2018,0,0
+9754587191,Oblomov,Gonçarov,2006,0,0
+9750817982,Büyük Defter-Kanıt-Üçüncü Yalan,Agota Kristof,2010,0,0
+9754586926,Dörtlükler,Ömer Hayyam,2016,0,0
+6051982450,Kimse Bakmazken Duygular Ne Yapar?,Tina Oziewicz,2022,0,0
+6053603538,Böyle Söyledi Zerdüşt,Friedrich Nietzsche,2011,0,0
+6057635833,VAR MISIN? Güçlü Bir Yaşam İçin Öneriler,Doğan Cüceloğlu,2021,0,0
+9752107834,Kozmos:Evrenin ve Yaşamın Sırları,Carl Sagan,2007,0,0
+6053759589,Ben Kirke,Madeline Miller,2019,0,0
+6053608289,Kumarbaz,Dostoyevski,2013,0,0
+6052980818,Körlük,Jose Saramago,2022,0,0
+6258431119,Dakikalar İÇinde Mitoloji,Neil Philip,2022,0,0
+6052998385,Atomatik Alışkanlıklar,James Clear,2020,0,0
+9753422660,Çürümenin Kitabı,Emil Cioran,2017,0,0
+9754589488,Toplum Sözleşmesi,Jean Jacques Rousseau,2006,0,0
+975210083X,İktidar,Robert Greene,2000,0,0
+6258431259,İnsan Geleceğini Nasıl Kurar?,İlber Ortaylı,2022,0,0
+625763153X,Geliştiren Anne Baba,Doğan Cüceoğlu,2021,0,0
+9754587175,Devlet,Platon,2017,0,0
+9753311214,Dost Kazanma ve İnsanları Etkileme Sanatı,Dale Carnegie,2018,0,0
+9752430996,Bir Ömür Nasıl Yaşanır?,İlber Ortaylı,2019,0,0
+6057321413,Hints For Life,Murat Ülker,2022,0,0
