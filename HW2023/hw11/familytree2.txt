@@ -1,0 +1,4 @@
+Name | Age | Father | Mother
+Murat|55|NOT KNOWN|NOT KNOWN|
+Surtuk|45|NOT KNOWN|NOT KNOWN|
+Alisan|34|Murat|Surtuk|

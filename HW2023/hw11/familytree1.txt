@@ -1,0 +1,8 @@
+Name | Age | Father | Mother
+YAhya|33|NOT KNOWN|NOT KNOWN|
+Selin|22|NOT KNOWN|NOT KNOWN|
+Ali|12|YAhya|Selin|
+Alice|3|Ali|Selin|
+Kuku|12|Ali|Selin|
+Bombay|22|Ali|Selin|
+Alikos|33|YAhya|Selin|

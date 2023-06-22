@@ -1,0 +1,4 @@
+Name | Age | Father | Mother
+Mikail|75|NOT KNOWN|NOT KNOWN|
+Ayse|68|NOT KNOWN|NOT KNOWN|
+Alice|55|Mikail|Ayse|
